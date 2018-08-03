@@ -71,6 +71,8 @@
 #include "atomicio.h"
 #include "misc.h"
 
+extern char *ssh_authsocket_env_name;
+
 static int agent_present = 0;
 
 /* helper */
@@ -109,7 +111,7 @@ ssh_get_authentication_socket(uid_t uid)
 	struct sockaddr_un sunaddr;
     struct stat sock_st;
 
-	authsocket = getenv(SSH_AUTHSOCKET_ENV_NAME);
+	authsocket = getenv(ssh_authsocket_env_name);
 	if (!authsocket)
 		return -1;
 
@@ -220,7 +222,7 @@ ssh_request_reply(AuthenticationConnection *auth, Buffer *request, Buffer *reply
 void
 ssh_close_authentication_socket(int sock)
 {
-	if (getenv(SSH_AUTHSOCKET_ENV_NAME))
+	if (getenv(ssh_authsocket_env_name))
 		close(sock);
 }
 

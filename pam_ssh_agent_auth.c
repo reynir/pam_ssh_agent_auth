@@ -65,6 +65,7 @@ char           *authorized_keys_file = NULL;
 uint8_t         allow_user_owned_authorized_keys_file = 0;
 char           *authorized_keys_command = NULL;
 char           *authorized_keys_command_user = NULL;
+char           *ssh_authsocket_env_name = SSH_AUTHSOCKET_ENV_NAME;
 
 #if ! HAVE___PROGNAME || HAVE_BUNDLE
 char           *__progname;
@@ -116,6 +117,10 @@ pam_sm_authenticate(pam_handle_t * pamh, int flags, int argc, const char **argv)
         }
         if(strncasecmp_literal(*argv_ptr, "file=") == 0 ) {
             authorized_keys_file_input = *argv_ptr + sizeof("file=") - 1;
+        }
+        /* TODO: Better name? */
+        if(strncasecmp_literal(*argv_ptr, "ssh_auth_sock=") == 0 ) {
+            ssh_authsocket_env_name = *argv_ptr + sizeof("ssh_auth_sock=") - 1;
         }
         if(strncasecmp_literal(*argv_ptr, "authorized_keys_command=") == 0 ) {
             authorized_keys_command = *argv_ptr + sizeof("authorized_keys_command=") - 1;
